@@ -1,0 +1,57 @@
+import cv2
+import numpy as np
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.image import img_to_array
+from tensorflow.keras.applications.vgg16 import preprocess_input
+import joblib
+
+# Dummy skull stripping function (replace with actual implementation)
+def skull_stripping(img):
+    # Placeholder: return image as-is
+    return img
+
+# Dummy median filter (replace with actual implementation if needed)
+def apply_median_filter(img):
+    return cv2.medianBlur(img, 3)
+
+# Load models
+feature_extractor = load_model('feature_extractor.h5')
+best_svm = joblib.load('svm_model.pkl')
+
+# Define class names
+class_names = ['AD', 'CN', 'MCI']
+
+# Prediction function
+def predict_image(image_path, feature_extractor, svm_model, class_names):
+    try:
+        # Load and preprocess the image
+        img = cv2.imread(image_path)
+        img = cv2.resize(img, (224, 224))
+        img = skull_stripping(img)
+        img = apply_median_filter(img)
+        img = img_to_array(img)
+        img = preprocess_input(img)
+        img = np.expand_dims(img, axis=0)
+
+        # Extract features using the CNN
+        features = feature_extractor.predict(img)
+
+        # Predict using the SVM
+        probs = svm_model.predict_proba(features)[0]
+        predicted_index = np.argmax(probs)
+        predicted_class = class_names[predicted_index]
+
+        # Print all class confidence scores
+        print("Class Confidence Scores:")
+        for label, score in zip(class_names, probs):
+            print(f"{label}: {score:.2f}")
+        print(f"\nPredicted: {predicted_class} with confidence {probs[predicted_index]:.2f}")
+
+        return predicted_class, probs
+
+    except Exception as e:
+        print(f"Prediction Error: {e}")
+        return None, None
+
+# Run prediction (replace 'ad1.jpg' with your image path)
+predict_image('mci.jpg', feature_extractor, best_svm, class_names)
