@@ -2,161 +2,445 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brain Disease Detection</title>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Raleway', sans-serif;
-            background: #f4f6f9;
+        :root {
+            --primary: #3a7bd5;
+            --primary-gradient: linear-gradient(135deg, #3a7bd5, #00d2ff);
+            --secondary: #ff6b6b;
+            --success: #2ecc71;
+            --light: #f9f9f9;
+            --dark: #2c3e50;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --card-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --border-radius: 16px;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            color: #333;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fa;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: radial-gradient(circle at top right, rgba(58, 123, 213, 0.1) 0%, transparent 60%),
+                             radial-gradient(circle at bottom left, rgba(0, 210, 255, 0.1) 0%, transparent 60%);
+            background-attachment: fixed;
         }
 
         .container {
-            width: 90%;
-            max-width: 1000px;
+            width: 100%;
+            max-width: 1100px;
             margin: 40px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
         }
 
         h1 {
-            text-align: center;
-            color: #4a90e2;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 25px auto 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
             margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(50, 50, 93, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         .upload-section {
             text-align: center;
-            margin-bottom: 30px;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+            background: white;
+        }
+
+        .upload-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-gradient);
         }
 
         .file-label {
             display: inline-block;
             padding: 15px 30px;
-            background: #4a90e2;
+            background: var(--primary-gradient);
             color: white;
             border-radius: 50px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: bold;
-            transition: background 0.3s ease;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(58, 123, 213, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .file-label::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+            z-index: -1;
         }
 
         .file-label:hover {
-            background: #357ABD;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(58, 123, 213, 0.4);
+        }
+
+        .file-label:hover::after {
+            left: 100%;
         }
 
         input[type="file"] {
             display: none;
         }
 
+        .upload-icon {
+            display: block;
+            margin: 0 auto 20px;
+            width: 80px;
+            height: 80px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .upload-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: var(--primary);
+        }
+
+        .upload-text {
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            color: #718096;
+        }
+
         .results-section {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
             margin-top: 30px;
+            gap: 30px;
         }
 
         .results-container {
-            flex: 1 1 45%;
-            background: #eaf1f8;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 10px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
-        }
-
-        .results-container h3 {
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .result-category {
-            font-size: 20px;
-            font-weight: bold;
-            color: #27ae60;
-            margin-bottom: 10px;
+            flex: 1 1 100%;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .image-preview {
+            flex: 1;
+            padding: 20px;
             text-align: center;
+            background: #f8fafc;
+            border-bottom: 1px solid #edf2f7;
         }
 
         .image-preview img {
             max-width: 100%;
             border-radius: 10px;
-            max-height: 300px;
+            max-height: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-details {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .result-details h3 {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .result-category {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--success);
+            padding: 10px 20px;
+            background: rgba(46, 204, 113, 0.1);
+            border-radius: 8px;
+            display: inline-block;
         }
 
         .result-explanation {
-            font-size: 15px;
-            margin-top: 10px;
+            font-size: 1rem;
+            line-height: 1.6;
         }
 
-        .result-explanation ul {
-            list-style: none;
-            padding-left: 0;
+        .result-explanation p {
+            margin-bottom: 15px;
+            font-weight: 500;
         }
 
-        .result-explanation li {
+        .confidence-bars {
+            margin-top: 20px;
+        }
+
+        .confidence-item {
+            margin-bottom: 15px;
+        }
+
+        .confidence-label {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 5px;
         }
 
-        .result-explanation li::before {
-            content: "• ";
-            color: #4a90e2;
+        .confidence-name {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .confidence-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .confidence-bar {
+            height: 8px;
+            width: 100%;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--primary-gradient);
+            transition: width 1s ease-out;
+        }
+
+        .brain-bg {
+            position: absolute;
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+            width: 300px;
+            height: 300px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDU4LCAxMjMsIDIxMywgMC4xKSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItYXJjaGl2ZSI+PHBhdGggZD0iTTExLjk5IDIuMDA4NTFjLTEuNjI2NTYgMC4wMTEwNzc5IC0zLjE5MDM2IDAuNjcxOTMyIC00LjM0OTYxIDEuODIzNDNjLTEuMTQwMjUgMS4xNDIyIC0xLjc5NDQzIDIuNjc3NjEgLTEuODIzNDMgNC4zNDk2MWMtMC4yMTQ3NDQgMC4wMTM5MTYzIC0wLjQyNzM5OSAwLjA0OTc5OTMgLTAuNjM2NzE5IDAuMDYwNTQ2OWMtMC45NzEzNTggMC4xMzQ2NDUgLTEuODkxNDggMC41MDE5MjQgLTIuNjY0MDYgMS4xMDM1MmMtMC41MTgwMDMgMC40MTc5NjEgLTAuOTcwNjMyIDAuOTg1NDkyIC0xLjI4NzExIDEuNTgyMDNjLTAuMzE1NTgxIDAuNTk1NDMyIC0wLjUxNTYyNSAxLjM1MzUyIC0wLjUxNTYyNSAyLjA3MDMxYzAgMC43NTExODUgMC4yMjU5MTQgMS41NTI3NiAwLjYwNzQyMiAyLjE4NzVjMC4zODE5OTUgMC42MzUyMjcgMC45MzI1MDcgMS4xNDkzOSAxLjU1MjczIDEuNDc0NjFjMC4wNzMyNTQgMC4zMDgyODUgMC4xODMwNjYgMC42MDc3ODcgMC4zMDM3MTEgMC44OTY0ODRjMC4yNjYwMyAwLjYzOTc4OSAwLjY4NDc5NCAxLjIyNDI0IDEuMjg3MTEgMS42NTIzNGMwLjM3ODUxMSAwLjI3MDg4MyAwLjg0NjA2NiAwLjQ4MjQzOCAxLjMxNjQxIDAuNjA3NDIyYzAuNDcwODMyIDAuMTI0OTg0IDAuOTkxNjk4IDAuMTgyNjE3IDEuNDc0NjEgMC4xODI2MTdjMC4wNzYzNTcgMCAwLjE1MzUxNCAtMC4wMDU1MyAwLjIyODUxNiAtMC4wMDk3N2MwLjM5NzA1MiAwLjU4MjI0NSAwLjg4MzY2NiAxLjExMzQzIDEuNDc0NjEgMS41MjM0NGMwLjUzNzM0MiAwLjM3NjEzOSAxLjIzMDIzIDAuNjg1NzE2IDEuOTI1NzggMC44Mzc4OTFjMC42OTYwNDUgMC4xNTE2ODggMS41MDYwMyAwLjE4NzQwNCAxLjk4NDM4IDAuMDk5NjA5NGMwLjQ4Mjg3OCAtMC4wODIzMzMgMC45NTQ0NTQgLTAuMzU2NTIyIDEuMzM1OTQgLTAuNjY3OTY5YzAuNzYyNTI0IC0wLjYyMTQ1NiAxLjIxMTczIC0xLjU4MTgzIDEuMzQ1NyAtMi41NzQyMmMwLjAyMzE1OSAtMC4xNzE5MjcgMC4wNDI5NyAtMC4zNjEyNDEgMC4wNDQ5MjIgLTAuNTQ0OTIyYzAuMDcyOSAwLjAwNDA5IDAuMTQ0MzI0IDAuMDA5NzcgMC4yMTg3NSAwLjAwOTc3YzAuNzgzOTU0IDAgMS41NDYzMiAtMC4xODQ5MjkgMi4yMDcwMyAtMC41MTU2MjVjMC42NjA3MjMgLTAuMzI2MTgzIDEuMjI3MTEgLTAuODM1NzMgMS42MzI4MSAtMS40NzQ2MWMwLjEyMDY0NSAtMC4xOTM5NzMgMC4yMzA0NTcgLTAuMzk2ODA3IDAuMzAzNzExIC0wLjYwNzQyMmMwLjA3NjM1NyAwLjAzNjcwNCAwLjE1MzUxNCAwLjA3MTM2NSAwLjIyODUxNiAwLjA5OTYwOTRjMC43NDk2MTQgMC4yOTcyMzIgMS41NzY0OCAwLjMzNDg3MyAyLjMzMjAzIDAuMTUyMzQ0YzAuNzU2MDQ5IC0wLjE4OTk0MiAxLjQyNjA5IC0wLjYxMDI0NiAxLjkxNjAyIC0xLjE5MTQxYzAuNDg5NDI1IC0wLjU3OTY1IDAuODI4MDc4IC0xLjM5ODc1IDAuODY3MTg4IC0yLjE3NzczYzAuMDM4NjE2IC0wLjc4NDQ1IC0wLjE3MTUyNyAtMS41NDg4OSAtMC41NTQ2ODggLTIuMTY3OTdjLTAuMDE3ODI3IC0wLjAyOTc4NCAtMC4wMzA4OTMgLTAuMDU5NTY3IC0wLjA0ODgyOCAtMC4wODk4NDM4YzAuMDQyOTcgLTAuMDY1MzU3IDAuMDg4MzgxIC0wLjEzMTIwMSAwLjEyODkwNiAtMC4xOTcyNjZjMC4wNDM0NjIgLTAuMDU1NTk0IDAuMDg2NDMzIC0wLjExNTI0OSAwLjEyODkwNiAtMC4xNzE4NzVjMC40NDk1MzIgLTAuNTk1OTE2IDAuNzI4NTE2IC0xLjI3MTA2IDAuODI4MTI1IC0xLjk1NTA4YzAuMDk5NjA5IC0wLjY4NTI3NCAwLjA0NTQxIC0xLjQxNDc0IC0wLjE4MjYxNyAtMi4wNzAzMWMtMC4yMjcwMzYgLTAuNjU2MDc3IC0wLjYwMTM0MyAtMS4yNjU5OSAtMS4xMTMyOCAtMS43MjI2NmMtMC41MTEwNDQgLTAuNDU4MjU4IC0xLjE5NjI4IC0wLjc3MzI0OCAtMS44NjkxNCAtMC45NDcyNjZjLTAuNTUzODQ5IC0wLjE0NTcyIC0xLjA1NDU3IC0wLjE5MDQ5NCAtMS41NjI1IC0wLjE3MTg3NWMtMC4wMzYyMTIgLTAuMDUzNjE3IC0wLjA2MzU3IC0wLjEwODIyNSAtMC4wOTk2MDk0IC0wLjE2MjEwOWMtMC4yNzA1OTggLTAuMzYwMjQyIC0wLjY0NjU1MSAtMC42NjEwNSAtMS4wNDI5NyAtMC44ODY3MTljLTAuNzgyOTY4IC0wLjQ0NDc5IAtxLjY2MzE2IC0wLjU0NTkwMSAtMi40MjU3OCAtMC40MTYwMTZjLTAuNjU4MDU0IDAuMTAyMjUgLTEuMjIzNjkgMC4zNjk1NjQgLTEuNzAzMTIgMC43OTg4MjhjLTAuNDA5MTc2IDAuMzY2MjE0IC0wLjc4NDg4NyAwLjg1OTA0NSAtMS4wMjM0NCAxLjQwNjI1Yy0wLjAxNDQwNSAwLjAzNzE5NCAtMC4wMjM2NzYgMC4wNzQzODcgLTAuMDM4MDg2IDAuMTEzMjgxYy0wLjA5NzYzMiAtMC4wMzIxMjYgLTAuMTg5MjYzIC0wLjA3MjgzMiAtMC4yODcxMDkgLTAuMDk5NjA5NGMtMC4yMzc5OTkgLTAuMDY3MzM2IC0wLjUxMTUzOCAtMC4xMDY2NzEgLTAuNzg5MDYyIC0wLjEyMzA0N2MtMC4wMDMyOTQgLTAuMDU3NTcgLTAuMDA1ODYyIC0wLjExNTI0OSAtMC4wMTM2NzE5IC0wLjE3MTg3NWMtMC4xMTg2NjIgLTAuOTAzNDQgLTAuNTgwMDgzIC0xLjc2MTU3IC0xLjI0MjE5IC0yLjM5MDYyYy0wLjY2NDYwOSAtMC42MjQ0MTUgLTEuNTIzNDQgLTAuOTc3NTM5IC0yLjM0MTggLTEuMDUyNzNjLTAuODE4MzU2IC0wLjA4MTg0MDUgLTEuNjM4MjggMC4wOTkxMTM2IC0yLjI4NTQ3IDAuNDQzMzU5bC0wLjA5Njc4OTUgMC4wNTI5OThjLTAuMDEzOTIxIC0wLjA1NjA5MDUgLTAuMDI4MzI1IC0wLjExMjY3OSAtMC4wMzgwODU5IC0wLjE3MTg3NXoiLz48L3N2Zz4=');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.1;
+            z-index: 0;
         }
 
         @media (max-width: 768px) {
             .results-section {
                 flex-direction: column;
-                align-items: center;
             }
 
             .results-container {
                 flex-basis: 100%;
             }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .brain-bg {
+                width: 200px;
+                height: 200px;
+                opacity: 0.05;
+            }
+        }
+
+        /* Animation effects */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .loading {
+            display: none;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--primary);
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Brain Disease Detection</h1>
+        <header class="fade-in">
+            <h1>Brain Disease Detection</h1>
+            <p class="subtitle">Upload a brain scan image to detect potential neurological conditions using advanced AI analysis</p>
+        </header>
 
-        <div class="upload-section">
-            <form action="/" method="post" enctype="multipart/form-data">
-                <label class="file-label">
-                    Upload Brain Image
-                    <input type="file" name="image" id="file-upload" onchange="this.form.submit()">
-                </label>
-            </form>
+        <div class="card fade-in" style="animation-delay: 0.2s">
+            <div class="upload-section">
+                <div class="brain-bg"></div>
+                <div class="upload-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </div>
+                <p class="upload-text">Select a brain scan image for analysis</p>
+                <form action="/" method="post" enctype="multipart/form-data">
+                    <label class="file-label pulse">
+                        Upload Brain Scan
+                        <input type="file" name="image" id="file-upload" onchange="this.form.submit(); showLoading()">
+                    </label>
+                </form>
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p style="margin-top: 10px; color: #718096;">Analyzing brain scan...</p>
+                </div>
+            </div>
         </div>
 
         {% if prediction %}
-        <div class="results-section" style="display: block;">
+        <div class="results-section fade-in" style="animation-delay: 0.4s">
             <div class="results-container">
                 <div class="image-preview">
-                    <img src="{{ img_path }}" alt="Uploaded Image">
+                    <img src="{{ img_path }}" alt="Uploaded Brain Scan">
                 </div>
                 <div class="result-details">
-                    <h3>Prediction</h3>
+                    <h3>Diagnosis Results</h3>
                     <div class="result-category">{{ prediction }}</div>
                     <div class="result-explanation">
-                        <p><strong>Confidence Scores:</strong></p>
-                        <ul>
+                        <p>Confidence Scores Analysis:</p>
+                        <div class="confidence-bars">
                             {% for label, score in confidence.items() %}
-                                <li>{{ label }}: {{ score }}</li>
+                            <div class="confidence-item">
+                                <div class="confidence-label">
+                                    <span class="confidence-name">{{ label }}</span>
+                                    <span class="confidence-value">{{ score }}%</span>
+                                </div>
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" style="width: {{ score }}%"></div>
+                                </div>
+                            </div>
                             {% endfor %}
-                        </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         {% endif %}
     </div>
+
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.querySelector('.file-label').style.display = 'none';
+        }
+        
+        // Initialize confidence bar animations if results are present
+        document.addEventListener('DOMContentLoaded', function() {
+            const confidenceFills = document.querySelectorAll('.confidence-fill');
+            confidenceFills.forEach(fill => {
+                const width = fill.style.width;
+                fill.style.width = '0';
+                setTimeout(() => {
+                    fill.style.width = width;
+                }, 300);
+            });
+        });
+    </script>
 </body>
 </html>
