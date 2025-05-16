@@ -51,7 +51,8 @@ def predict_image(img_path):
         probs = svm_model.predict_proba(features)[0]
         predicted_class_idx = np.argmax(probs)
         predicted_class = class_names[predicted_class_idx]
-        confidence_scores = {label: round(float(score), 2) for label, score in zip(class_names, probs)}
+        confidence_scores = {label: round(float(score) * 100, 2) for label, score in zip(class_names, probs)}
+        # confidence_scores = {label: round(float(score), 2) for label, score in zip(class_names, probs)}
         return predicted_class, confidence_scores
     except Exception as e:
         print(f"Prediction Error: {e}")

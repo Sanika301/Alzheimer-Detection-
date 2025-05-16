@@ -6,6 +6,117 @@
     <title>Brain Disease Detection</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        .about-section {
+    background-color: #f7fafc;
+    padding: 40px 20px;
+    border-radius: 12px;
+    max-width: 900px;
+    margin: 50px auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.about-section h2 {
+    font-size: 2rem;
+    color: #2d3748;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.about-section p {
+    font-size: 1rem;
+    color: #4a5568;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.process-steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .process-steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.step {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 5px solid #4299e1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.step:hover {
+    transform: translateY(-4px);
+}
+
+.step h3 {
+    font-size: 1.2rem;
+    color: #2b6cb0;
+    margin-bottom: 10px;
+}
+
+.step p {
+    font-size: 0.95rem;
+    color: #4a5568;
+}
+
+        /* Navigation Bar */
+.navbar {
+    background-color: #2c3e50;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #18bc9c;
+}
+
+/* Fade-in Animation */
+.fade-in {
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
         :root {
             --primary: #3a7bd5;
             --primary-gradient: linear-gradient(135deg, #3a7bd5, #00d2ff);
@@ -364,66 +475,100 @@
 </head>
 <body>
     <div class="container">
-        <header class="fade-in">
-            <h1>Brain Disease Detection</h1>
-            <p class="subtitle">Upload a brain scan image to detect potential neurological conditions using advanced AI analysis</p>
-        </header>
+    <header class="fade-in" id="home">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="#" class="nav-logo">AlzDetect</a>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#upload" class="nav-link">Upload</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                </ul>
+            </div>
+        </nav>
+        <h1>Alzheimer Disease Detection</h1>
+        <p class="subtitle">Upload a brain scan image to detect potential neurological conditions using advanced AI analysis</p>
+    </header>
 
-        <div class="card fade-in" style="animation-delay: 0.2s">
-            <div class="upload-section">
-                <div class="brain-bg"></div>
-                <div class="upload-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
-                </div>
-                <p class="upload-text">Select a brain scan image for analysis</p>
-                <form action="/" method="post" enctype="multipart/form-data">
-                    <label class="file-label pulse">
-                        Upload Brain Scan
-                        <input type="file" name="image" id="file-upload" onchange="this.form.submit(); showLoading()">
-                    </label>
-                </form>
-                <div class="loading" id="loading">
-                    <div class="loading-spinner"></div>
-                    <p style="margin-top: 10px; color: #718096;">Analyzing brain scan...</p>
-                </div>
+    <div class="card fade-in" id="upload" style="animation-delay: 0.2s">
+        <div class="upload-section">
+            <div class="brain-bg"></div>
+            <div class="upload-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+            </div>
+            <p class="upload-text">Select a brain scan image for analysis</p>
+            <form action="/" method="post" enctype="multipart/form-data">
+                <label class="file-label pulse">
+                    Upload Brain Scan
+                    <input type="file" name="image" id="file-upload" onchange="this.form.submit(); showLoading()">
+                </label>
+            </form>
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <p style="margin-top: 10px; color: #718096;">Analyzing brain scan...</p>
             </div>
         </div>
+    </div>
 
-        {% if prediction %}
-        <div class="results-section fade-in" style="animation-delay: 0.4s">
-            <div class="results-container">
-                <div class="image-preview">
-                    <img src="{{ img_path }}" alt="Uploaded Brain Scan">
-                </div>
-                <div class="result-details">
-                    <h3>Diagnosis Results</h3>
-                    <div class="result-category">{{ prediction }}</div>
-                    <div class="result-explanation">
-                        <p>Confidence Scores Analysis:</p>
-                        <div class="confidence-bars">
-                            {% for label, score in confidence.items() %}
-                            <div class="confidence-item">
-                                <div class="confidence-label">
-                                    <span class="confidence-name">{{ label }}</span>
-                                    <span class="confidence-value">{{ score }}%</span>
-                                </div>
-                                <div class="confidence-bar">
-                                    <div class="confidence-fill" style="width: {{ score }}%"></div>
-                                </div>
+    {% if prediction %}
+    <div class="results-section fade-in" style="animation-delay: 0.4s">
+        <div class="results-container">
+            <div class="image-preview">
+                <img src="{{ img_path }}" alt="Uploaded Brain Scan">
+            </div>
+            <div class="result-details">
+                <h3>Diagnosis Results</h3>
+                <div class="result-category">{{ prediction }}</div>
+                <div class="result-explanation">
+                    <p>Confidence Scores Analysis:</p>
+                    <div class="confidence-bars">
+                        {% for label, score in confidence.items() %}
+                        <div class="confidence-item">
+                            <div class="confidence-label">
+                                <span class="confidence-name">{{ label }}</span>
+                                <span class="confidence-value">{{ score }}%</span>
                             </div>
-                            {% endfor %}
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: {{ score }}%"></div>
+                            </div>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
-        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- About Section -->
+    <div id="about" class="about-section fade-in" style="animation-delay: 0.6s;">
+    <h2>How AlzDetect Works</h2>
+    <p>AlzDetect leverages a robust AI pipeline to analyze brain MRI scans for Alzheimer's disease classification. Here's how the process works:</p>
+    <div class="process-steps">
+        <div class="step">
+            <h3>1. Preprocessing</h3>
+            <p>Uploaded brain scans undergo skull stripping to remove non-brain tissues, followed by median filtering to reduce noise and enhance scan quality.</p>
+        </div>
+        <div class="step">
+            <h3>2. Data Balancing</h3>
+            <p>We use SMOTETomek, a hybrid resampling method, to balance the dataset by oversampling minority classes and cleaning noisy samples.</p>
+        </div>
+        <div class="step">
+            <h3>3. Feature Extraction</h3>
+            <p>DenseNet121, a convolutional neural network, extracts deep features from the preprocessed scans, capturing complex patterns indicative of Alzheimer’s stages.</p>
+        </div>
+        <div class="step">
+            <h3>4. Classification</h3>
+            <p>An SVM (Support Vector Machine) classifier analyzes the extracted features to predict the category of Alzheimer’s disease.</p>
+        </div>
+    </div>
     </div>
 
+    </div>
     <script>
         function showLoading() {
             document.getElementById('loading').style.display = 'block';
